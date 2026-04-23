@@ -1,0 +1,34 @@
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.row > * {
+  flex: 1;
+}
+
+.categoryField {
+  flex: 1.5;
+}
+
+.nameField {
+  flex: 2;
+}
+
+.removeBtn {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-placeholder);
+  border-radius: 8px;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.removeBtn:hover {
+  color: var(--color-error);
+  background-color: var(--color-error-bg);
+}

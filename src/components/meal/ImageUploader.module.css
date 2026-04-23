@@ -1,0 +1,58 @@
+.uploader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 40px 24px;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  min-height: 280px;
+  text-align: center;
+}
+
+.uploader:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-accent-light);
+}
+
+.hasImage {
+  padding: 0;
+  border-style: solid;
+  border-color: var(--color-border);
+  overflow: hidden;
+}
+
+.preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 280px;
+  display: block;
+}
+
+.icon {
+  color: var(--color-text-placeholder);
+}
+
+.text {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--color-text-placeholder);
+}
+
+.uploading {
+  font-size: 14px;
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.hidden {
+  display: none;
+}
