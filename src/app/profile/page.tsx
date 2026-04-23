@@ -26,7 +26,7 @@ export default function ProfilePage() {
     { label: "키", value: `${user.height}`, unit: "cm" },
     { label: "몸무게", value: `${user.weight}`, unit: "kg" },
     { label: "성별", value: GENDER_LABELS[user.gender] || user.gender, unit: "" },
-    { label: "생년월일", value: user.birth_date, unit: "" },
+    { label: "나이", value: `${new Date().getFullYear() - new Date(user.birth_date).getFullYear()}`, unit: "세" },
   ];
 
   return (
