@@ -12,7 +12,7 @@ export default function Landing() {
       <section className={styles.hero}>
         {/* 좌: 텍스트 */}
         <div className={styles.heroText}>
-          <div className={styles.heroLogo}>CalorieLens</div>
+          <div className={styles.heroLogo}>Recody</div>
           <h1 className={styles.heroTitle}>
             당신의 <span className={styles.heroHighlight}>식단</span>을
             <br />
@@ -20,7 +20,7 @@ export default function Landing() {
           </h1>
           <p className={styles.heroDesc}>
             사진 한 장으로 칼로리를 분석하고, 매일의 영양 섭취를
-            한눈에 확인하세요. 건강한 식습관의 시작, CalorieLens와 함께.
+            한눈에 확인하세요. 건강한 식습관의 시작, Recody와 함께.
           </p>
           <div className={styles.heroBtns}>
             {user ? (
@@ -149,7 +149,7 @@ export default function Landing() {
       </section>
 
       <footer className={styles.footer}>
-        &copy; 2025 CalorieLens. All rights reserved.
+        &copy; 2025 Recody. All rights reserved.
       </footer>
     </div>
   );

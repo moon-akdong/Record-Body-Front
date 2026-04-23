@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "로그인 - CalorieLens",
+  title: "로그인 - Recody",
 };
 
 export default function LoginLayout({ children }: { children: React.ReactNode }) {

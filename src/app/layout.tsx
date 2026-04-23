@@ -16,7 +16,7 @@ const notoSansKR = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: "CalorieLens",
+  title: "Recody",
   description: "음식 칼로리 추적 서비스",
 };
 

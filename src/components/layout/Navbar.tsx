@@ -21,7 +21,7 @@ export default function Navbar() {
   return (
     <nav className={styles.navbar}>
       <Link href="/" className={styles.logo}>
-        CalorieLens
+        Recody
       </Link>
 
       <div className={styles.nav}>
