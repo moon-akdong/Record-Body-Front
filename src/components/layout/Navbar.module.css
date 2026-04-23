@@ -1,0 +1,68 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 64px;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-navbar);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.navLink {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  border-radius: 8px;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.navLink:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+}
+
+.active {
+  color: var(--color-primary);
+  background-color: var(--color-accent-light);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profileBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--color-accent-light);
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color var(--transition-fast);
+}
+
+.profileBtn:hover {
+  background-color: #d9ede1;
+}
