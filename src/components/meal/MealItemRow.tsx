@@ -37,8 +37,8 @@ export default function MealItemRow({
         <Input
           label={index === 0 ? "음식명" : undefined}
           placeholder="음식 이름"
-          value={item.food_name}
-          onChange={(e) => onChange(index, "food_name", e.target.value)}
+          value={item.food_name_kr}
+          onChange={(e) => onChange(index, "food_name_kr", e.target.value)}
           required
         />
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { startOfDay } from "date-fns";
+import { startOfDay, format } from "date-fns";
 import AuthGuard from "@/components/layout/AuthGuard";
 import DateNavigator from "@/components/records/DateNavigator";
 import DailySummary from "@/components/records/DailySummary";
@@ -15,6 +15,7 @@ export default function RecordsPage() {
   const [meals, setMeals] = useState<MealResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [recordDates, setRecordDates] = useState<Set<string>>(new Set());
 
   const fetchMeals = useCallback(async () => {
     setLoading(true);
@@ -22,6 +23,13 @@ export default function RecordsPage() {
     try {
       const data = await getMealsByDate(date);
       setMeals(data);
+      if (data.length > 0) {
+        setRecordDates((prev) => {
+          const next = new Set(prev);
+          next.add(format(date, "yyyy-MM-dd"));
+          return next;
+        });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "기록을 불러오지 못했습니다.");
     } finally {
@@ -37,7 +45,11 @@ export default function RecordsPage() {
     <AuthGuard>
       <div className={styles.container}>
         <h1 className={styles.title}>기록 보기</h1>
-        <DateNavigator date={date} onChange={(d) => setDate(startOfDay(d))} />
+        <DateNavigator
+          date={date}
+          onChange={(d) => setDate(startOfDay(d))}
+          recordDates={recordDates}
+        />
 
         {loading ? (
           <div className={styles.loading}>불러오는 중...</div>

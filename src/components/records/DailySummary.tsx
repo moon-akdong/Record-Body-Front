@@ -10,16 +10,14 @@ interface DailySummaryProps {
 export default function DailySummary({ meals }: DailySummaryProps) {
   const totals = meals.reduce(
     (acc, meal) => {
-      meal.items.forEach((item) => {
-        acc.calories += item.calories;
-        acc.carbs += item.carbs_g;
-        acc.protein += item.protein_g;
-        acc.fat += item.fat_g;
-        acc.amount += item.amount_g;
-      });
+      acc.calories += meal.total_calories;
+      acc.carbs += meal.total_carb;
+      acc.protein += meal.total_protein;
+      acc.fat += meal.total_fat;
+      acc.sugar += meal.total_sugar;
       return acc;
     },
-    { calories: 0, carbs: 0, protein: 0, fat: 0, amount: 0 }
+    { calories: 0, carbs: 0, protein: 0, fat: 0, sugar: 0 }
   );
 
   const stats = [
@@ -27,7 +25,7 @@ export default function DailySummary({ meals }: DailySummaryProps) {
     { label: "탄수화물", value: `${Math.round(totals.carbs)}`, unit: "g" },
     { label: "단백질", value: `${Math.round(totals.protein)}`, unit: "g" },
     { label: "지방", value: `${Math.round(totals.fat)}`, unit: "g" },
-    { label: "총 섭취량", value: `${Math.round(totals.amount)}`, unit: "g" },
+    { label: "당류", value: `${Math.round(totals.sugar)}`, unit: "g" },
   ];
 
   return (

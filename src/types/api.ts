@@ -30,42 +30,62 @@ export interface User {
   created_at: string;
 }
 
-// Meal
+// Meal - 입력용 (프론트 → 백엔드)
 export interface MealItem {
-  food_name: string;
+  food_name_kr: string;
   amount_g: number;
   category: string;
-  calories: number;
-  carbs_g: number;
-  protein_g: number;
-  fat_g: number;
 }
 
 export interface MealCreateRequest {
   meal_type: string;
   eaten_at: string;
-  image_url?: string;
-  memo?: string;
+  image_url: string;
+  note: string;
   items: MealItem[];
 }
 
-export interface MealItemResponse extends MealItem {
-  id: number;
+// Meal - 생성 응답
+export interface CreateMealResponse {
+  user_id: number;
+  image_url: string;
   meal_id: number;
+}
+
+// Meal - 조회 응답 (백엔드 → 프론트)
+export interface MealItemResponse {
+  name: string;
+  amount_g: number;
+  calories: number;
+  carb: number;
+  protein: number;
+  fat: number;
+  sugar: number;
 }
 
 export interface MealResponse {
   id: number;
   user_id: number;
-  meal_type: string;
   eaten_at: string;
-  image_url: string | null;
-  memo: string | null;
-  created_at: string;
+  image_url: string;
+  meal_type: string;
+  total_calories: number;
+  total_carb: number;
+  total_protein: number;
+  total_fat: number;
+  total_sugar: number;
+  note: string;
   items: MealItemResponse[];
 }
 
 // Image Upload
 export interface ImageUploadResponse {
+  file_name: string;
   image_url: string;
+  message: string;
+}
+
+// Sub Category
+export interface SubCategoryResponse {
+  name: string;
 }

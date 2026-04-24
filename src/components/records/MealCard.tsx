@@ -55,37 +55,29 @@ export default function MealCard({ meal, onDeleted }: MealCardProps) {
         )}
 
         <div className={styles.content}>
-          <div className={styles.table}>
-            <div className={styles.tableHeader}>
-              <span className={styles.colName}>음식명</span>
-              <span className={styles.colNum}>양(g)</span>
-              <span className={styles.colNum}>칼로리</span>
-              <span className={styles.colNum}>탄수</span>
-              <span className={styles.colNum}>단백</span>
-              <span className={styles.colNum}>지방</span>
+          <div className={styles.nutrients}>
+            <div className={styles.nutrientMain}>
+              <span className={styles.nutrientValue}>{Math.round(meal.total_calories)}</span>
+              <span className={styles.nutrientUnit}>kcal</span>
             </div>
-            {meal.items.map((item) => (
-              <div key={item.id} className={styles.tableRow}>
-                <span className={styles.colName}>{item.food_name}</span>
-                <span className={styles.colNum}>{item.amount_g}</span>
-                <span className={styles.colNum}>{item.calories}</span>
-                <span className={styles.colNum}>{item.carbs_g}</span>
-                <span className={styles.colNum}>{item.protein_g}</span>
-                <span className={styles.colNum}>{item.fat_g}</span>
-              </div>
-            ))}
+            <div className={styles.nutrientRow}>
+              <span className={styles.nutrientItem}>탄수 {Math.round(meal.total_carb)}g</span>
+              <span className={styles.nutrientItem}>단백 {Math.round(meal.total_protein)}g</span>
+              <span className={styles.nutrientItem}>지방 {Math.round(meal.total_fat)}g</span>
+              <span className={styles.nutrientItem}>당류 {Math.round(meal.total_sugar)}g</span>
+            </div>
           </div>
         </div>
       </div>
 
       <div className={styles.footer}>
-        {meal.memo ? (
+        {meal.note ? (
           <div className={styles.memo}>
             <svg className={styles.memoIcon} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <path d="M12 20h9" />
               <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z" />
             </svg>
-            {meal.memo}
+            {meal.note}
           </div>
         ) : (
           <div />

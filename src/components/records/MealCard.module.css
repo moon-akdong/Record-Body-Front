@@ -55,49 +55,39 @@
   color: var(--color-text-secondary);
 }
 
-.table {
+.nutrients {
   display: flex;
   flex-direction: column;
-  gap: 0;
-}
-
-.tableHeader {
-  display: flex;
   gap: 8px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--color-border);
+  justify-content: center;
 }
 
-.tableHeader span {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-text-secondary);
-  text-transform: uppercase;
-}
-
-.tableRow {
+.nutrientMain {
   display: flex;
-  gap: 8px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--color-border);
+  align-items: baseline;
+  gap: 4px;
 }
 
-.tableRow:last-child {
-  border-bottom: none;
-}
-
-.tableRow span {
-  font-size: 14px;
+.nutrientValue {
+  font-size: 22px;
+  font-weight: 700;
   color: var(--color-text-primary);
 }
 
-.colName {
-  flex: 2;
+.nutrientUnit {
+  font-size: 13px;
+  color: var(--color-text-secondary);
 }
 
-.colNum {
-  flex: 1;
-  text-align: right;
+.nutrientRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.nutrientItem {
+  font-size: 13px;
+  color: var(--color-text-secondary);
 }
 
 .footer {

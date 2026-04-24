@@ -22,6 +22,7 @@ const MACRO_COLORS = {
   carbs: "#4CAF50",
   protein: "#2196F3",
   fat: "#FF9800",
+  sugar:"#c12727 "
 };
 
 function DonutChart({
@@ -99,6 +100,7 @@ export default function MealDetailPage({
   const [meal, setMeal] = useState<MealResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [lightbox, setLightbox] = useState(false);
 
   useEffect(() => {
     getMealById(Number(id))
@@ -138,10 +140,11 @@ export default function MealDetailPage({
     );
   }
 
-  const totalCalories = meal.items.reduce((s, i) => s + i.calories, 0);
-  const totalCarbs = meal.items.reduce((s, i) => s + i.carbs_g, 0);
-  const totalProtein = meal.items.reduce((s, i) => s + i.protein_g, 0);
-  const totalFat = meal.items.reduce((s, i) => s + i.fat_g, 0);
+  const totalCalories = meal.total_calories;
+  const totalCarbs = meal.total_carb;
+  const totalProtein = meal.total_protein;
+  const totalFat = meal.total_fat;
+  const totalSugar = meal.total_sugar;
   const maxCalories = Math.max(...meal.items.map((i) => i.calories), 1);
 
   return (
@@ -172,7 +175,19 @@ export default function MealDetailPage({
         {/* Image */}
         {meal.image_url && (
           <div className={styles.imageSection}>
-            <img src={meal.image_url} alt="음식 사진" className={styles.mealImage} />
+            <img
+              src={meal.image_url}
+              alt="음식 사진"
+              className={styles.mealImage}
+              onClick={() => setLightbox(true)}
+            />
+          </div>
+        )}
+
+        {/* Lightbox */}
+        {lightbox && meal.image_url && (
+          <div className={styles.lightbox} onClick={() => setLightbox(false)}>
+            <img src={meal.image_url} alt="원본 사진" className={styles.lightboxImage} />
           </div>
         )}
 
@@ -202,6 +217,12 @@ export default function MealDetailPage({
               {totalFat}<span className={styles.summaryUnit}> g</span>
             </span>
           </Card>
+          <Card className={styles.summaryCard}>
+            <span className={styles.summaryLabel}>당류</span>
+            <span className={styles.summaryValue}>
+              {totalSugar}<span className={styles.summaryUnit}> g</span>
+            </span>
+          </Card>
         </div>
 
         {/* Donut Chart */}
@@ -227,6 +248,11 @@ export default function MealDetailPage({
                 <span className={styles.legendLabel}>지방</span>
                 <span className={styles.legendValue}>{totalFat}g</span>
               </div>
+              <div className={styles.legendItem}>
+                <div className={styles.legendDot} style={{ backgroundColor: MACRO_COLORS.sugar }} />
+                <span className={styles.legendLabel}>당류</span>
+                <span className={styles.legendValue}>{totalSugar}g</span>
+              </div>
             </div>
           </div>
         </Card>
@@ -242,15 +268,17 @@ export default function MealDetailPage({
               <span className={styles.colNum}>탄수</span>
               <span className={styles.colNum}>단백</span>
               <span className={styles.colNum}>지방</span>
+              <span className={styles.colNum}>당류</span>
             </div>
-            {meal.items.map((item) => (
-              <div key={item.id} className={styles.tableRow}>
-                <span className={styles.colName}>{item.food_name}</span>
+            {meal.items.map((item, idx) => (
+              <div key={idx} className={styles.tableRow}>
+                <span className={styles.colName}>{item.name}</span>
                 <span className={styles.colNum}>{item.amount_g}</span>
                 <span className={styles.colNum}>{item.calories}</span>
-                <span className={styles.colNum}>{item.carbs_g}</span>
-                <span className={styles.colNum}>{item.protein_g}</span>
-                <span className={styles.colNum}>{item.fat_g}</span>
+                <span className={styles.colNum}>{item.carb}</span>
+                <span className={styles.colNum}>{item.protein}</span>
+                <span className={styles.colNum}>{item.fat}</span>
+                <span className={styles.colNum}>{item.sugar}</span>
               </div>
             ))}
             <div className={styles.totalRow}>
@@ -260,6 +288,7 @@ export default function MealDetailPage({
               <span className={styles.colNum}>{totalCarbs}</span>
               <span className={styles.colNum}>{totalProtein}</span>
               <span className={styles.colNum}>{totalFat}</span>
+              <span className={styles.colNum}>{totalSugar}</span>
             </div>
           </div>
         </Card>
@@ -269,9 +298,9 @@ export default function MealDetailPage({
           <Card className={styles.barSection}>
             <div className={styles.barTitle}>음식별 칼로리 비교</div>
             <div className={styles.barList}>
-              {meal.items.map((item) => (
-                <div key={item.id} className={styles.barItem}>
-                  <span className={styles.barLabel}>{item.food_name}</span>
+              {meal.items.map((item, idx) => (
+                <div key={idx} className={styles.barItem}>
+                  <span className={styles.barLabel}>{item.name}</span>
                   <div className={styles.barTrack}>
                     <div
                       className={styles.barFill}
@@ -286,10 +315,10 @@ export default function MealDetailPage({
         )}
 
         {/* Memo */}
-        {meal.memo && (
+        {meal.note && (
           <Card className={styles.memoSection}>
             <div className={styles.memoTitle}>메모</div>
-            <div className={styles.memoContent}>{meal.memo}</div>
+            <div className={styles.memoContent}>{meal.note}</div>
           </Card>
         )}
       </div>
