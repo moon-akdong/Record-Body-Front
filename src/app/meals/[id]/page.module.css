@@ -65,7 +65,32 @@
   width: 100%;
   max-height: 360px;
   object-fit: cover;
-  border-radius: var(--radius-card);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.mealImage:hover {
+  opacity: 0.9;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: pointer;
+  padding: 24px;
+}
+
+.lightboxImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 /* Summary Cards */
