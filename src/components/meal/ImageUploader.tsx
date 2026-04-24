@@ -1,36 +1,23 @@
 "use client";
 
 import { useRef, useState, ChangeEvent } from "react";
-import { uploadImage } from "@/lib/api";
 import styles from "./ImageUploader.module.css";
 
 interface ImageUploaderProps {
-  imageUrl: string;
-  onUploaded: (url: string) => void;
+  previewUrl: string;
+  onFileSelect: (file: File | null) => void;
 }
 
-export default function ImageUploader({ imageUrl, onUploaded }: ImageUploaderProps) {
+export default function ImageUploader({ previewUrl, onFileSelect }: ImageUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [uploading, setUploading] = useState(false);
-  const [localPreview, setLocalPreview] = useState("");
 
-  async function handleChange(e: ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    setLocalPreview(URL.createObjectURL(file));
-    setUploading(true);
-    try {
-      const res = await uploadImage(file);
-      onUploaded(res.image_url);
-    } catch {
-      setLocalPreview("");
-    } finally {
-      setUploading(false);
-    }
+    onFileSelect(file);
   }
 
-  const preview = localPreview || imageUrl;
+  const preview = previewUrl;
 
   return (
     <>
@@ -38,9 +25,7 @@ export default function ImageUploader({ imageUrl, onUploaded }: ImageUploaderPro
         className={`${styles.uploader} ${preview ? styles.hasImage : ""}`}
         onClick={() => inputRef.current?.click()}
       >
-        {uploading ? (
-          <span className={styles.uploading}>업로드 중...</span>
-        ) : preview ? (
+        {preview ? (
           <img src={preview} alt="음식 사진" className={styles.preview} />
         ) : (
           <>

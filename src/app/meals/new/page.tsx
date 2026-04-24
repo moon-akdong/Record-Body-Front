@@ -1,14 +1,17 @@
 "use client";
 
 import { FormEvent, useEffect, useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import AuthGuard from "@/components/layout/AuthGuard";
 import Card from "@/components/ui/Card";
 import Select from "@/components/ui/Select";
+import ComboBox from "@/components/ui/ComboBox";
+import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import ImageUploader from "@/components/meal/ImageUploader";
 import MealItemRow from "@/components/meal/MealItemRow";
-import { createMeal, getSubCategories } from "@/lib/api";
+import { createMeal, uploadImage, getSubCategories } from "@/lib/api";
 import { MealItem } from "@/types/api";
 import styles from "./page.module.css";
 
@@ -17,7 +20,32 @@ const MEAL_TYPE_OPTIONS = [
   { value: "lunch", label: "점심" },
   { value: "dinner", label: "저녁" },
   { value: "snack", label: "간식" },
+  { value: "night", label: "야식" },
 ];
+
+const AMPM_OPTIONS = [
+  { value: "AM", label: "오전" },
+  { value: "PM", label: "오후" },
+];
+
+function generateHour12Options() {
+  const opts = [];
+  for (let h = 12; h >= 1; h--) {
+    if (h === 12) {
+      opts.unshift({ value: String(h), label: `${h}시` });
+    } else {
+      opts.push({ value: String(h), label: `${h}시` });
+    }
+  }
+  // reorder: 12, 1, 2, ... 11
+  return [
+    { value: "12", label: "12시" },
+    ...Array.from({ length: 11 }, (_, i) => ({
+      value: String(i + 1),
+      label: `${i + 1}시`,
+    })),
+  ];
+}
 
 function generateYearOptions() {
   const current = new Date().getFullYear();
@@ -47,15 +75,6 @@ function generateDayOptions(year: string, month: string) {
   return opts;
 }
 
-function generateHourOptions() {
-  const opts = [];
-  for (let h = 0; h < 24; h++) {
-    const label = h < 12 ? `오전 ${h === 0 ? 12 : h}시` : `오후 ${h === 12 ? 12 : h - 12}시`;
-    opts.push({ value: String(h).padStart(2, "0"), label });
-  }
-  return opts;
-}
-
 function generateMinuteOptions() {
   const opts = [];
   for (let m = 0; m < 60; m += 5) {
@@ -65,25 +84,29 @@ function generateMinuteOptions() {
 }
 
 function emptyItem(): MealItem {
-  return { food_name: "", amount_g: 0, category: "", calories: 0, carbs_g: 0, protein_g: 0, fat_g: 0 };
+  return { food_name_kr: "", amount_g: 0, category: "" };
 }
 
 function getNow() {
   const now = new Date();
+  const h = now.getHours();
   return {
     year: String(now.getFullYear()),
     month: String(now.getMonth() + 1).padStart(2, "0"),
     day: String(now.getDate()).padStart(2, "0"),
-    hour: String(now.getHours()).padStart(2, "0"),
+    ampm: h < 12 ? "AM" : "PM",
+    hour12: String(h === 0 ? 12 : h > 12 ? h - 12 : h),
     minute: String(Math.floor(now.getMinutes() / 5) * 5).padStart(2, "0"),
   };
 }
 
 export default function MealNewPage() {
+  const router = useRouter();
   const { user } = useAuth();
   const [mealType, setMealType] = useState("lunch");
   const [dateTime, setDateTime] = useState(getNow);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState("");
   const [items, setItems] = useState<MealItem[]>([emptyItem()]);
   const [memo, setMemo] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
@@ -97,7 +120,7 @@ export default function MealNewPage() {
     () => generateDayOptions(dateTime.year, dateTime.month),
     [dateTime.year, dateTime.month]
   );
-  const hourOptions = useMemo(() => generateHourOptions(), []);
+  const hour12Options = useMemo(() => generateHour12Options(), []);
   const minuteOptions = useMemo(() => generateMinuteOptions(), []);
 
   function updateDateTime(field: string, value: string) {
@@ -120,10 +143,23 @@ export default function MealNewPage() {
     setItems((prev) => prev.filter((_, i) => i !== index));
   }
 
+  function handleFileSelect(file: File | null) {
+    if (imagePreview) URL.revokeObjectURL(imagePreview);
+    if (file) {
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      setImageFile(null);
+      setImagePreview("");
+    }
+  }
+
   function resetForm() {
     setMealType("lunch");
     setDateTime(getNow());
-    setImageUrl("");
+    if (imagePreview) URL.revokeObjectURL(imagePreview);
+    setImageFile(null);
+    setImagePreview("");
     setMemo("");
     setItems([emptyItem()]);
   }
@@ -134,24 +170,39 @@ export default function MealNewPage() {
     setSuccess("");
     setSubmitting(true);
 
+    let hour24 = Number(dateTime.hour12);
+    if (dateTime.ampm === "AM") {
+      hour24 = hour24 === 12 ? 0 : hour24;
+    } else {
+      hour24 = hour24 === 12 ? 12 : hour24 + 12;
+    }
+    const minuteVal = Math.min(59, Math.max(0, Number(dateTime.minute) || 0));
+
     const eatenAt = new Date(
       Number(dateTime.year),
       Number(dateTime.month) - 1,
       Number(dateTime.day),
-      Number(dateTime.hour),
-      Number(dateTime.minute)
+      hour24,
+      minuteVal
     ).toISOString();
 
     try {
-      await createMeal({
+      let imageUrl: string | undefined;
+      if (imageFile) {
+        const res = await uploadImage(imageFile);
+        imageUrl = res.image_url;
+      }
+
+      const payload = {
         meal_type: mealType,
         eaten_at: eatenAt,
-        image_url: imageUrl || undefined,
-        memo: memo || undefined,
+        image_url: imageUrl || "",
+        note: memo,
         items,
-      });
-      setSuccess("식사가 성공적으로 등록되었습니다!");
-      resetForm();
+      };
+      console.log("createMeal payload:", JSON.stringify(payload, null, 2));
+      await createMeal(payload);
+      router.push("/records");
     } catch (err) {
       setError(err instanceof Error ? err.message : "등록에 실패했습니다.");
     } finally {
@@ -174,7 +225,7 @@ export default function MealNewPage() {
             <div className={styles.left}>
               <Card>
                 <div className={styles.sectionLabel}>음식 사진</div>
-                <ImageUploader imageUrl={imageUrl} onUploaded={setImageUrl} />
+                <ImageUploader previewUrl={imagePreview} onFileSelect={handleFileSelect} />
               </Card>
 
               <Card>
@@ -193,11 +244,12 @@ export default function MealNewPage() {
               <Card>
                 <div className={styles.sectionLabel}>식사 정보</div>
                 <div className={styles.mealMeta}>
-                  <Select
+                  <ComboBox
                     label="식사 유형"
+                    placeholder="유형 선택 또는 입력"
                     options={MEAL_TYPE_OPTIONS}
                     value={mealType}
-                    onChange={(e) => setMealType(e.target.value)}
+                    onChange={setMealType}
                   />
                 </div>
                 <div className={styles.dateTimeLabel}>식사 날짜</div>
@@ -221,14 +273,20 @@ export default function MealNewPage() {
                 <div className={styles.dateTimeLabel}>식사 시간</div>
                 <div className={styles.timeRow}>
                   <Select
-                    options={hourOptions}
-                    value={dateTime.hour}
-                    onChange={(e) => updateDateTime("hour", e.target.value)}
+                    options={AMPM_OPTIONS}
+                    value={dateTime.ampm}
+                    onChange={(e) => updateDateTime("ampm", e.target.value)}
                   />
                   <Select
+                    options={hour12Options}
+                    value={dateTime.hour12}
+                    onChange={(e) => updateDateTime("hour12", e.target.value)}
+                  />
+                  <ComboBox
+                    placeholder="분"
                     options={minuteOptions}
                     value={dateTime.minute}
-                    onChange={(e) => updateDateTime("minute", e.target.value)}
+                    onChange={(v) => updateDateTime("minute", v)}
                   />
                 </div>
               </Card>
