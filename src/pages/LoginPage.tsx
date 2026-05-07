@@ -1,18 +1,15 @@
-"use client";
-
 import { FormEvent, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import GuestGuard from "@/components/layout/GuestGuard";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
-import styles from "./page.module.css";
+import styles from "@/app/login/page.module.css";
 
 export default function LoginPage() {
   const { login } = useAuth();
-  const router = useRouter();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -24,7 +21,7 @@ export default function LoginPage() {
     setSubmitting(true);
     try {
       await login(email, password);
-      router.push("/");
+      navigate("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "로그인에 실패했습니다.");
     } finally {
@@ -69,7 +66,7 @@ export default function LoginPage() {
 
           <div className={styles.footer}>
             계정이 없으신가요?
-            <Link href="/register" className={styles.link}>
+            <Link to="/register" className={styles.link}>
               회원가입
             </Link>
           </div>

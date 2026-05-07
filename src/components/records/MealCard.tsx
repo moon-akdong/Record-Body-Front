@@ -1,6 +1,4 @@
-"use client";
-
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import Card from "@/components/ui/Card";
 import { MealResponse } from "@/types/api";
@@ -83,7 +81,7 @@ export default function MealCard({ meal, onDeleted }: MealCardProps) {
           <div />
         )}
         <div className={styles.footerActions}>
-          <Link href={`/meals/${meal.id}`} className={styles.detailLink}>
+          <Link to={`/meals/${meal.id}`} className={styles.detailLink}>
             상세보기
           </Link>
           <button className={styles.deleteBtn} onClick={handleDelete}>

@@ -1,15 +1,12 @@
-"use client";
-
-import { useEffect, useState, use } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import AuthGuard from "@/components/layout/AuthGuard";
 import Card from "@/components/ui/Card";
 import { getMealById, deleteMeal } from "@/lib/api";
 import { MealResponse } from "@/types/api";
-import styles from "./page.module.css";
+import styles from "@/app/meals/[id]/page.module.css";
 
 const MEAL_TYPE_LABELS: Record<string, string> = {
   breakfast: "아침",
@@ -90,13 +87,9 @@ function DonutChart({
   );
 }
 
-export default function MealDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = use(params);
-  const router = useRouter();
+export default function MealDetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [meal, setMeal] = useState<MealResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -113,7 +106,7 @@ export default function MealDetailPage({
     if (!meal || !confirm("이 식사 기록을 삭제하시겠습니까?")) return;
     try {
       await deleteMeal(meal.id);
-      router.push("/records");
+      navigate("/records");
     } catch {
       alert("삭제에 실패했습니다.");
     }
@@ -132,7 +125,7 @@ export default function MealDetailPage({
       <AuthGuard>
         <div className={styles.container}>
           <div className={styles.error}>{error || "식사를 찾을 수 없습니다."}</div>
-          <Link href="/records" className={styles.backLink}>
+          <Link to="/records" className={styles.backLink}>
             기록 보기로 돌아가기
           </Link>
         </div>
@@ -150,7 +143,7 @@ export default function MealDetailPage({
   return (
     <AuthGuard>
       <div className={styles.container}>
-        <Link href="/records" className={styles.backLink}>
+        <Link to="/records" className={styles.backLink}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>

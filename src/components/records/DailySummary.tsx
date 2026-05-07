@@ -1,5 +1,3 @@
-"use client";
-
 import { MealResponse } from "@/types/api";
 import styles from "./DailySummary.module.css";
 

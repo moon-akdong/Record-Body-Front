@@ -1,5 +1,3 @@
-"use client";
-
 import { useRef, useState, ChangeEvent } from "react";
 import styles from "./ImageUploader.module.css";
 

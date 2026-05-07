@@ -1,5 +1,3 @@
-"use client";
-
 import { ButtonHTMLAttributes } from "react";
 import styles from "./Button.module.css";
 

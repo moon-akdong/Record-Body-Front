@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useEffect, useState } from "react";
 import { startOfDay, format } from "date-fns";
 import AuthGuard from "@/components/layout/AuthGuard";
@@ -8,7 +6,7 @@ import DailySummary from "@/components/records/DailySummary";
 import MealCard from "@/components/records/MealCard";
 import { getMealsByDate } from "@/lib/api";
 import { MealResponse } from "@/types/api";
-import styles from "./page.module.css";
+import styles from "@/app/records/page.module.css";
 
 export default function RecordsPage() {
   const [date, setDate] = useState(() => startOfDay(new Date()));

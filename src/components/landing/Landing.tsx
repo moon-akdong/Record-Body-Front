@@ -1,6 +1,4 @@
-"use client";
-
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import styles from "./Landing.module.css";
 
@@ -24,15 +22,15 @@ export default function Landing() {
           </p>
           <div className={styles.heroBtns}>
             {user ? (
-              <Link href="/meals/new" className={`${styles.heroBtn} ${styles.heroBtnPrimary}`}>
+              <Link to="/meals/new" className={`${styles.heroBtn} ${styles.heroBtnPrimary}`}>
                 음식 입력하기
               </Link>
             ) : (
               <>
-                <Link href="/register" className={`${styles.heroBtn} ${styles.heroBtnPrimary}`}>
+                <Link to="/register" className={`${styles.heroBtn} ${styles.heroBtnPrimary}`}>
                   무료로 시작하기
                 </Link>
-                <Link href="/login" className={`${styles.heroBtn} ${styles.heroBtnOutline}`}>
+                <Link to="/login" className={`${styles.heroBtn} ${styles.heroBtnOutline}`}>
                   로그인
                 </Link>
               </>

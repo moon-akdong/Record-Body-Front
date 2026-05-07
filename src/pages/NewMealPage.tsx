@@ -1,7 +1,5 @@
-"use client";
-
 import { FormEvent, useEffect, useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import AuthGuard from "@/components/layout/AuthGuard";
 import Card from "@/components/ui/Card";
@@ -13,7 +11,7 @@ import ImageUploader from "@/components/meal/ImageUploader";
 import MealItemRow from "@/components/meal/MealItemRow";
 import { createMeal, uploadImage, getSubCategories } from "@/lib/api";
 import { MealItem } from "@/types/api";
-import styles from "./page.module.css";
+import styles from "@/app/meals/new/page.module.css";
 
 const MEAL_TYPE_OPTIONS = [
   { value: "breakfast", label: "아침" },
@@ -29,15 +27,6 @@ const AMPM_OPTIONS = [
 ];
 
 function generateHour12Options() {
-  const opts = [];
-  for (let h = 12; h >= 1; h--) {
-    if (h === 12) {
-      opts.unshift({ value: String(h), label: `${h}시` });
-    } else {
-      opts.push({ value: String(h), label: `${h}시` });
-    }
-  }
-  // reorder: 12, 1, 2, ... 11
   return [
     { value: "12", label: "12시" },
     ...Array.from({ length: 11 }, (_, i) => ({
@@ -100,8 +89,8 @@ function getNow() {
   };
 }
 
-export default function MealNewPage() {
-  const router = useRouter();
+export default function NewMealPage() {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [mealType, setMealType] = useState("lunch");
   const [dateTime, setDateTime] = useState(getNow);
@@ -202,7 +191,7 @@ export default function MealNewPage() {
       };
       console.log("createMeal payload:", JSON.stringify(payload, null, 2));
       await createMeal(payload);
-      router.push("/records");
+      navigate("/records");
     } catch (err) {
       setError(err instanceof Error ? err.message : "등록에 실패했습니다.");
     } finally {

@@ -1,10 +1,8 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import AuthGuard from "@/components/layout/AuthGuard";
 import Card from "@/components/ui/Card";
-import styles from "./page.module.css";
+import styles from "@/app/profile/page.module.css";
 
 const GENDER_LABELS: Record<string, string> = {
   male: "남성",
@@ -13,11 +11,11 @@ const GENDER_LABELS: Record<string, string> = {
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   function handleLogout() {
     logout();
-    router.push("/login");
+    navigate("/login");
   }
 
   if (!user) return null;

@@ -1,5 +1,3 @@
-"use client";
-
 import { SelectHTMLAttributes } from "react";
 import styles from "./Select.module.css";
 

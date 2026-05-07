@@ -1,5 +1,3 @@
-"use client";
-
 import Input from "@/components/ui/Input";
 import ComboBox from "@/components/ui/ComboBox";
 import { MealItem } from "@/types/api";

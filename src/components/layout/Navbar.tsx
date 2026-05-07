@@ -1,7 +1,4 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import styles from "./Navbar.module.css";
 
@@ -11,7 +8,7 @@ const NAV_ITEMS = [
 ];
 
 export default function Navbar() {
-  const pathname = usePathname();
+  const { pathname } = useLocation();
   const { user } = useAuth();
 
   if (!user) return null;
@@ -20,7 +17,7 @@ export default function Navbar() {
 
   return (
     <nav className={styles.navbar}>
-      <Link href="/" className={styles.logo}>
+      <Link to="/" className={styles.logo}>
         Recody
       </Link>
 
@@ -28,7 +25,7 @@ export default function Navbar() {
         {NAV_ITEMS.map((item) => (
           <Link
             key={item.href}
-            href={item.href}
+            to={item.href}
             className={`${styles.navLink} ${pathname === item.href ? styles.active : ""}`}
           >
             {item.label}
@@ -37,7 +34,7 @@ export default function Navbar() {
       </div>
 
       <div className={styles.right}>
-        <Link href="/profile" className={styles.profileBtn}>
+        <Link to="/profile" className={styles.profileBtn}>
           {initial}
         </Link>
       </div>

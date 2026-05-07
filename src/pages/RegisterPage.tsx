@@ -1,8 +1,5 @@
-"use client";
-
 import { FormEvent, useState, useMemo } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import GuestGuard from "@/components/layout/GuestGuard";
 import Card from "@/components/ui/Card";
@@ -10,7 +7,7 @@ import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
 import { register } from "@/lib/api";
-import styles from "./page.module.css";
+import styles from "@/app/register/page.module.css";
 
 const GENDER_OPTIONS = [
   { value: "", label: "선택하세요" },
@@ -48,7 +45,7 @@ function generateDayOptions(year: string, month: string) {
 
 export default function RegisterPage() {
   const { login } = useAuth();
-  const router = useRouter();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -103,7 +100,7 @@ export default function RegisterPage() {
         weight: Number(form.weight),
       });
       await login(form.email, form.password);
-      router.push("/");
+      navigate("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "회원가입에 실패했습니다.");
     } finally {
@@ -217,7 +214,7 @@ export default function RegisterPage() {
 
           <div className={styles.footer}>
             이미 계정이 있으신가요?
-            <Link href="/login" className={styles.link}>
+            <Link to="/login" className={styles.link}>
               로그인
             </Link>
           </div>
