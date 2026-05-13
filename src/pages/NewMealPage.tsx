@@ -101,7 +101,6 @@ export default function NewMealPage() {
   const [categories, setCategories] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const yearOptions = useMemo(() => generateYearOptions(), []);
   const monthOptions = useMemo(() => generateMonthOptions(), []);
@@ -156,7 +155,6 @@ export default function NewMealPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
-    setSuccess("");
     setSubmitting(true);
 
     let hour24 = Number(dateTime.hour12);
@@ -167,13 +165,7 @@ export default function NewMealPage() {
     }
     const minuteVal = Math.min(59, Math.max(0, Number(dateTime.minute) || 0));
 
-    const eatenAt = new Date(
-      Number(dateTime.year),
-      Number(dateTime.month) - 1,
-      Number(dateTime.day),
-      hour24,
-      minuteVal
-    ).toISOString();
+    const eatenAt = `${dateTime.year}-${dateTime.month}-${dateTime.day}T${String(hour24).padStart(2, "0")}:${String(minuteVal).padStart(2, "0")}:00`;
 
     try {
       let imageUrl: string | undefined;
@@ -189,7 +181,6 @@ export default function NewMealPage() {
         note: memo,
         items,
       };
-      console.log("createMeal payload:", JSON.stringify(payload, null, 2));
       await createMeal(payload);
       navigate("/records");
     } catch (err) {
@@ -206,7 +197,6 @@ export default function NewMealPage() {
           {user?.name}님, 오늘 뭘 드셨나요?
         </h1>
 
-        {success && <div className={styles.successMsg}>{success}</div>}
         {error && <div className={styles.errorMsg}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
