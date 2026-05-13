@@ -19,19 +19,21 @@ const MACRO_COLORS = {
   carbs: "#4CAF50",
   protein: "#2196F3",
   fat: "#FF9800",
-  sugar:"#c12727 "
+  sugar: "#c12727"
 };
 
 function DonutChart({
   carbs,
   protein,
   fat,
+  sugar,
 }: {
   carbs: number;
   protein: number;
   fat: number;
+  sugar: number;
 }) {
-  const total = carbs + protein + fat;
+  const total = carbs + protein + fat + sugar;
   if (total === 0) {
     return (
       <svg width="160" height="160" viewBox="0 0 160 160">
@@ -42,41 +44,33 @@ function DonutChart({
 
   const radius = 60;
   const circumference = 2 * Math.PI * radius;
-  const carbsRatio = carbs / total;
-  const proteinRatio = protein / total;
-  const fatRatio = fat / total;
 
-  const carbsLength = carbsRatio * circumference;
-  const proteinLength = proteinRatio * circumference;
-  const fatLength = fatRatio * circumference;
+  const segments = [
+    { color: MACRO_COLORS.carbs, value: carbs },
+    { color: MACRO_COLORS.protein, value: protein },
+    { color: MACRO_COLORS.fat, value: fat },
+    { color: MACRO_COLORS.sugar, value: sugar },
+  ];
 
-  const carbsOffset = 0;
-  const proteinOffset = -carbsLength;
-  const fatOffset = -(carbsLength + proteinLength);
+  let accumulated = 0;
 
   return (
     <svg width="160" height="160" viewBox="0 0 160 160">
-      <circle
-        cx="80" cy="80" r={radius} fill="none"
-        stroke={MACRO_COLORS.carbs} strokeWidth="20"
-        strokeDasharray={`${carbsLength} ${circumference - carbsLength}`}
-        strokeDashoffset={carbsOffset}
-        transform="rotate(-90 80 80)"
-      />
-      <circle
-        cx="80" cy="80" r={radius} fill="none"
-        stroke={MACRO_COLORS.protein} strokeWidth="20"
-        strokeDasharray={`${proteinLength} ${circumference - proteinLength}`}
-        strokeDashoffset={proteinOffset}
-        transform="rotate(-90 80 80)"
-      />
-      <circle
-        cx="80" cy="80" r={radius} fill="none"
-        stroke={MACRO_COLORS.fat} strokeWidth="20"
-        strokeDasharray={`${fatLength} ${circumference - fatLength}`}
-        strokeDashoffset={fatOffset}
-        transform="rotate(-90 80 80)"
-      />
+      {segments.map((seg, i) => {
+        const length = (seg.value / total) * circumference;
+        const offset = -accumulated;
+        accumulated += length;
+        return (
+          <circle
+            key={i}
+            cx="80" cy="80" r={radius} fill="none"
+            stroke={seg.color} strokeWidth="20"
+            strokeDasharray={`${length} ${circumference - length}`}
+            strokeDashoffset={offset}
+            transform="rotate(-90 80 80)"
+          />
+        );
+      })}
       <text x="80" y="76" textAnchor="middle" fontSize="22" fontWeight="700" fill="#1A2B23">
         {total.toFixed(0)}
       </text>
@@ -223,7 +217,7 @@ export default function MealDetailPage() {
           <div className={styles.chartTitle}>영양소 비율</div>
           <div className={styles.chartRow}>
             <div className={styles.donutWrapper}>
-              <DonutChart carbs={totalCarbs} protein={totalProtein} fat={totalFat} />
+              <DonutChart carbs={totalCarbs} protein={totalProtein} fat={totalFat} sugar={totalSugar} />
             </div>
             <div className={styles.legend}>
               <div className={styles.legendItem}>
