@@ -66,3 +66,38 @@
 .profileBtn:hover {
   background-color: #d9ede1;
 }
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 16px;
+    gap: 8px;
+  }
+
+  .nav {
+    gap: 2px;
+  }
+
+  .navLink {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .right {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0 12px;
+  }
+
+  .navLink {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .logo {
+    font-size: 17px;
+  }
+}

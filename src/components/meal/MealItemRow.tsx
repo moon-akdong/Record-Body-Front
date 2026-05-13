@@ -40,14 +40,16 @@ export default function MealItemRow({
           required
         />
       </div>
-      <Input
-        label={index === 0 ? "양(g)" : undefined}
-        type="number"
-        placeholder="100"
-        value={item.amount_g || ""}
-        onChange={(e) => onChange(index, "amount_g", Number(e.target.value))}
-        required
-      />
+      <div className={styles.amountField}>
+        <Input
+          label={index === 0 ? "양(g)" : undefined}
+          type="number"
+          placeholder="100"
+          value={item.amount_g || ""}
+          onChange={(e) => onChange(index, "amount_g", Number(e.target.value))}
+          required
+        />
+      </div>
       <button
         type="button"
         className={styles.removeBtn}

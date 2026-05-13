@@ -43,3 +43,18 @@
   font-size: 12px;
   color: var(--color-error);
 }
+
+@media (max-width: 480px) {
+  .wrapper {
+    gap: 4px;
+  }
+
+  .label {
+    font-size: 12px;
+  }
+
+  .input {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}

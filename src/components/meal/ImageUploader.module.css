@@ -56,3 +56,25 @@
 .hidden {
   display: none;
 }
+
+@media (max-width: 768px) {
+  .uploader {
+    min-height: 200px;
+    padding: 24px 16px;
+  }
+
+  .preview {
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .uploader {
+    min-height: 160px;
+    padding: 20px 12px;
+  }
+
+  .preview {
+    min-height: 160px;
+  }
+}

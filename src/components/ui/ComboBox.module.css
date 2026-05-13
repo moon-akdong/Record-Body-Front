@@ -63,3 +63,23 @@
   font-size: 13px;
   color: var(--color-text-placeholder);
 }
+
+@media (max-width: 480px) {
+  .wrapper {
+    gap: 4px;
+  }
+
+  .label {
+    font-size: 12px;
+  }
+
+  .input {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .option {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}
