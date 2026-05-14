@@ -37,14 +37,22 @@
 
 @media (max-width: 768px) {
   .summary {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
 
+  .highlight {
+    grid-column: 1 / -1;
+    padding: 16px 12px;
+  }
+
+  .highlight .statValue {
+    font-size: 24px;
+  }
+
   .stat {
-    flex: 1 1 calc(33.33% - 6px);
-    min-width: 0;
-    padding: 12px 6px;
+    padding: 12px 8px;
   }
 
   .statValue {
@@ -53,16 +61,5 @@
 
   .statLabel {
     font-size: 11px;
-  }
-}
-
-@media (max-width: 480px) {
-  .stat {
-    flex: 1 1 calc(50% - 4px);
-    padding: 10px 4px;
-  }
-
-  .statValue {
-    font-size: 15px;
   }
 }
