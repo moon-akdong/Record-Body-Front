@@ -207,7 +207,7 @@ export default function NewMealPage() {
                 <ImageUploader previewUrl={imagePreview} onFileSelect={handleFileSelect} />
               </Card>
 
-              <Card>
+              <Card className={styles.memoCard}>
                 <div className={styles.sectionLabel}>메모 (선택)</div>
                 <textarea
                   className={styles.memoInput}
