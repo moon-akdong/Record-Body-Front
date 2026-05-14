@@ -34,7 +34,7 @@ export default function LoginPage() {
       <div className={styles.container}>
         <Card className={styles.card}>
           <div className={styles.header}>
-            <div className={styles.logo}>Recody</div>
+            <Link to="/" className={styles.logo}>Recody</Link>
             <p className={styles.subtitle}>음식 칼로리를 쉽게 추적하세요</p>
           </div>
 

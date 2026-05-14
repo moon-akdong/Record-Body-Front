@@ -45,10 +45,10 @@ async function request<T>(
 
   if (res.status === 401) {
     removeToken();
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && !path.startsWith("/users/login")) {
       window.location.href = "/login";
     }
-    throw new ApiError(401, "Unauthorized");
+    throw new ApiError(401, "이메일 또는 비밀번호가 올바르지 않습니다.");
   }
 
   if (!res.ok) {
@@ -119,6 +119,17 @@ export async function getMealById(mealId: number): Promise<MealResponse> {
 
 export async function deleteMeal(mealId: number): Promise<void> {
   return request<void>(`/meals/${mealId}`, { method: "DELETE" });
+}
+
+// Record Dates
+export async function getRecordDates(
+  year: number,
+  month: number
+): Promise<string[]> {
+  const data = await request<{ month: string[] }>(
+    `/check_record/month_record?year=${year}&month=${month}`
+  );
+  return data.month;
 }
 
 // Sub Categories
