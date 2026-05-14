@@ -180,7 +180,7 @@ export default function MealDetailPage() {
 
         {/* Summary */}
         <div className={styles.summaryGrid}>
-          <Card className={styles.summaryCard}>
+          <Card className={`${styles.summaryCard} ${styles.summaryHighlight}`}>
             <span className={styles.summaryLabel}>칼로리</span>
             <span className={styles.summaryValue}>
               {totalCalories}<span className={styles.summaryUnit}> kcal</span>
@@ -252,8 +252,8 @@ export default function MealDetailPage() {
               <span className={styles.colName}>음식명</span>
               <span className={styles.colNum}>양(g)</span>
               <span className={styles.colNum}>칼로리</span>
-              <span className={styles.colNum}>탄수</span>
-              <span className={styles.colNum}>단백</span>
+              <span className={styles.colNum}>탄수화물</span>
+              <span className={styles.colNum}>단백질</span>
               <span className={styles.colNum}>지방</span>
               <span className={styles.colNum}>당류</span>
             </div>
