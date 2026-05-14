@@ -4,7 +4,7 @@ import AuthGuard from "@/components/layout/AuthGuard";
 import DateNavigator from "@/components/records/DateNavigator";
 import DailySummary from "@/components/records/DailySummary";
 import MealCard from "@/components/records/MealCard";
-import { getMealsByDate } from "@/lib/api";
+import { getMealsByDate, getRecordDates } from "@/lib/api";
 import { MealResponse } from "@/types/api";
 import styles from "@/app/records/page.module.css";
 
@@ -21,13 +21,6 @@ export default function RecordsPage() {
     try {
       const data = await getMealsByDate(date);
       setMeals(data);
-      if (data.length > 0) {
-        setRecordDates((prev) => {
-          const next = new Set(prev);
-          next.add(format(date, "yyyy-MM-dd"));
-          return next;
-        });
-      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "기록을 불러오지 못했습니다.");
     } finally {
@@ -35,9 +28,22 @@ export default function RecordsPage() {
     }
   }, [date]);
 
+  const fetchRecordDates = useCallback(async (year: number, month: number) => {
+    try {
+      const dates = await getRecordDates(year, month);
+      setRecordDates(new Set(dates));
+    } catch {
+      // ignore
+    }
+  }, []);
+
   useEffect(() => {
     fetchMeals();
   }, [fetchMeals]);
+
+  useEffect(() => {
+    fetchRecordDates(date.getFullYear(), date.getMonth() + 1);
+  }, [date, fetchRecordDates]);
 
   return (
     <AuthGuard>
@@ -47,6 +53,7 @@ export default function RecordsPage() {
           date={date}
           onChange={(d) => setDate(startOfDay(d))}
           recordDates={recordDates}
+          onMonthChange={fetchRecordDates}
         />
 
         {loading ? (

@@ -19,11 +19,12 @@ interface DateNavigatorProps {
   date: Date;
   onChange: (date: Date) => void;
   recordDates?: Set<string>;
+  onMonthChange?: (year: number, month: number) => void;
 }
 
 const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
-export default function DateNavigator({ date, onChange, recordDates }: DateNavigatorProps) {
+export default function DateNavigator({ date, onChange, recordDates, onMonthChange }: DateNavigatorProps) {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [viewMonth, setViewMonth] = useState(startOfMonth(date));
 
@@ -80,13 +81,21 @@ export default function DateNavigator({ date, onChange, recordDates }: DateNavig
       {calendarOpen && (
         <div className={styles.calendar}>
           <div className={styles.calHeader}>
-            <button className={styles.calArrow} onClick={() => setViewMonth(subMonths(viewMonth, 1))}>
+            <button className={styles.calArrow} onClick={() => {
+              const prev = subMonths(viewMonth, 1);
+              setViewMonth(prev);
+              onMonthChange?.(prev.getFullYear(), prev.getMonth() + 1);
+            }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M15 18l-6-6 6-6" />
               </svg>
             </button>
             <span className={styles.calMonth}>{format(viewMonth, "yyyy년 M월")}</span>
-            <button className={styles.calArrow} onClick={() => setViewMonth(addMonths(viewMonth, 1))}>
+            <button className={styles.calArrow} onClick={() => {
+              const next = addMonths(viewMonth, 1);
+              setViewMonth(next);
+              onMonthChange?.(next.getFullYear(), next.getMonth() + 1);
+            }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M9 18l6-6-6-6" />
               </svg>
