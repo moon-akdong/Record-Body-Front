@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState, useMemo } from "react";
+import { FormEvent, useEffect, useRef, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import AuthGuard from "@/components/layout/AuthGuard";
@@ -9,7 +9,7 @@ import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import ImageUploader from "@/components/meal/ImageUploader";
 import MealItemRow from "@/components/meal/MealItemRow";
-import { createMeal, uploadImage, getSubCategories } from "@/lib/api";
+import { createMeal, uploadImage, getSubCategories, ApiError } from "@/lib/api";
 import { MealItem } from "@/types/api";
 import styles from "@/app/meals/new/page.module.css";
 
@@ -101,6 +101,7 @@ export default function NewMealPage() {
   const [categories, setCategories] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const errorRef = useRef<HTMLDivElement>(null);
 
   const yearOptions = useMemo(() => generateYearOptions(), []);
   const monthOptions = useMemo(() => generateMonthOptions(), []);
@@ -118,6 +119,12 @@ export default function NewMealPage() {
   useEffect(() => {
     getSubCategories().then(setCategories).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (error && errorRef.current) {
+      errorRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [error]);
 
   function handleItemChange(index: number, field: keyof MealItem, value: string | number) {
     setItems((prev) => prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)));
@@ -184,7 +191,11 @@ export default function NewMealPage() {
       await createMeal(payload);
       navigate("/records");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "등록에 실패했습니다.");
+      if (err instanceof ApiError && err.status === 409) {
+        setError("해당 시간대에 이미 등록된 식사 기록이 있습니다.");
+      } else {
+        setError(err instanceof Error ? err.message : "등록에 실패했습니다.");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -197,7 +208,7 @@ export default function NewMealPage() {
           {user?.name}님, 오늘 뭘 드셨나요?
         </h1>
 
-        {error && <div className={styles.errorMsg}>{error}</div>}
+        {error && <div ref={errorRef} className={styles.errorMsg}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className={styles.grid}>
