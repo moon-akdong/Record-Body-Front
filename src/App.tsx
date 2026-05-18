@@ -7,8 +7,11 @@ import NewMealPage from "@/pages/NewMealPage";
 import MealDetailPage from "@/pages/MealDetailPage";
 import RecordsPage from "@/pages/RecordsPage";
 import ProfilePage from "@/pages/ProfilePage";
+import { usePageTracking } from "@/hooks/usePageTracking";
 
 export default function App() {
+  usePageTracking();
+
   return (
     <>
       <Navbar />
