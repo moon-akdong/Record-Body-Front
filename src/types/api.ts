@@ -30,6 +30,19 @@ export interface User {
   created_at: string;
 }
 
+export interface UserProfileUpdateRequest {
+  name: string;
+  birth_date: string;
+  gender: string;
+  height: number;
+  weight: number;
+}
+
+export interface UserBodyUpdateRequest {
+  height?: number;
+  weight?: number;
+}
+
 // Meal - 입력용 (프론트 → 백엔드)
 export interface MealItem {
   food_name_kr: string;

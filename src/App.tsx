@@ -7,6 +7,8 @@ import NewMealPage from "@/pages/NewMealPage";
 import MealDetailPage from "@/pages/MealDetailPage";
 import RecordsPage from "@/pages/RecordsPage";
 import ProfilePage from "@/pages/ProfilePage";
+import ProfileEditPage from "@/pages/ProfileEditPage";
+import BodyEditPage from "@/pages/BodyEditPage";
 import { usePageTracking } from "@/hooks/usePageTracking";
 
 export default function App() {
@@ -24,6 +26,8 @@ export default function App() {
           <Route path="/meals/:id" element={<MealDetailPage />} />
           <Route path="/records" element={<RecordsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/edit" element={<ProfileEditPage />} />
+          <Route path="/profile/body" element={<BodyEditPage />} />
         </Routes>
       </main>
     </>

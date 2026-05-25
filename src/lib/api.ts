@@ -2,6 +2,8 @@ import {
   TokenResponse,
   RegisterRequest,
   User,
+  UserProfileUpdateRequest,
+  UserBodyUpdateRequest,
   MealCreateRequest,
   CreateMealResponse,
   MealResponse,
@@ -89,6 +91,24 @@ export async function register(data: RegisterRequest): Promise<User> {
 // User
 export async function getMe(): Promise<User> {
   return request<User>("/users/me");
+}
+
+export async function updateProfile(
+  data: UserProfileUpdateRequest
+): Promise<User> {
+  return request<User>("/users/me", {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateBody(
+  data: UserBodyUpdateRequest
+): Promise<User> {
+  return request<User>("/users/me", {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
 }
 
 // Meals

@@ -56,8 +56,14 @@ export default function ProfilePage() {
         <Card>
           <div className={styles.sectionTitle}>계정 설정</div>
           <div className={styles.menuList}>
-            <div className={styles.menuItem}>
-              프로필 수정
+            <div className={styles.menuItem} onClick={() => navigate("/profile/edit")}>
+              회원 정보 수정
+              <svg className={styles.arrow} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </div>
+            <div className={styles.menuItem} onClick={() => navigate("/profile/body")}>
+              신체 정보 변경
               <svg className={styles.arrow} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M9 18l6-6-6-6" />
               </svg>
