@@ -11,6 +11,7 @@ import {
   SubCategoryResponse,
   PeriodNutritionRequest,
   TdeeResponse,
+  OneDayTdeeResponse,
 } from "@/types/api";
 import { getToken, removeToken } from "./auth";
 
@@ -162,6 +163,18 @@ export async function getDailyTdee(
     method: "POST",
     body: JSON.stringify(data),
   });
+}
+
+// TDEE - One Day (all activity levels)
+export async function getOneDayTdee(date: Date): Promise<OneDayTdeeResponse> {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  const dateStr = `${y}-${m}-${d}T00:00:00`;
+  return request<OneDayTdeeResponse>(
+    `/check_record/day_tdee?date=${encodeURIComponent(dateStr)}`,
+    { method: "POST" }
+  );
 }
 
 // Sub Categories

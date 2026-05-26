@@ -113,6 +113,19 @@ export interface DailyTdee {
 
 export type TdeeResponse = Record<string, DailyTdee>;
 
+export interface OneDayActiveLevels {
+  SEDENTARY: number;
+  LIGHT: number;
+  MODERATE: number;
+  ACTIVE: number;
+  VERY_ACTIVE: number;
+}
+
+export interface OneDayTdeeResponse {
+  total_calories: number;
+  levels: OneDayActiveLevels;
+}
+
 // Sub Category
 export interface SubCategoryResponse {
   name: string;
