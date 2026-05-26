@@ -1,0 +1,208 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+/* Input Section */
+.inputSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dateRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dateRow > * {
+  flex: 1;
+}
+
+.dateSeparator {
+  flex: 0 0 auto !important;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+/* Summary Cards */
+.summaryGrid {
+  display: flex;
+  gap: 12px;
+}
+
+.summaryCard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 20px 12px;
+}
+
+.summaryValue {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.summaryValue.surplus {
+  color: var(--color-error);
+}
+
+.summaryValue.deficit {
+  color: #2196f3;
+}
+
+.summaryLabel {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+/* Daily Detail */
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 12px;
+}
+
+.dailyList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.dailyRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dailyRow:last-child {
+  border-bottom: none;
+}
+
+.dailyDate {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  min-width: 90px;
+}
+
+.dailyMessage {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  flex: 1;
+  text-align: center;
+}
+
+.dailyValue {
+  font-size: 15px;
+  font-weight: 700;
+  min-width: 80px;
+  text-align: right;
+}
+
+.dailyValue.surplus {
+  color: var(--color-error);
+}
+
+.dailyValue.deficit {
+  color: #2196f3;
+}
+
+/* Bar visualization */
+.barWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 12px;
+}
+
+.bar {
+  height: 8px;
+  border-radius: 4px;
+  background-color: var(--color-border);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width var(--transition-normal);
+}
+
+.barFill.surplus {
+  background-color: var(--color-error);
+}
+
+.barFill.deficit {
+  background-color: #2196f3;
+}
+
+/* Error / Empty */
+.errorMsg {
+  font-size: 13px;
+  color: var(--color-error);
+  background-color: var(--color-error-bg);
+  padding: 10px 14px;
+  border-radius: var(--radius-input);
+  text-align: center;
+}
+
+.emptyMsg {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  padding: 40px 0;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 20px 16px;
+  }
+
+  .summaryGrid {
+    flex-direction: column;
+  }
+
+  .dateRow {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .dateSeparator {
+    display: none;
+  }
+
+  .dailyRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .dailyValue {
+    text-align: left;
+  }
+
+  .barWrapper {
+    margin: 0;
+    width: 100%;
+  }
+}

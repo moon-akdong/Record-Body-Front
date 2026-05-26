@@ -9,6 +9,7 @@ import RecordsPage from "@/pages/RecordsPage";
 import ProfilePage from "@/pages/ProfilePage";
 import ProfileEditPage from "@/pages/ProfileEditPage";
 import BodyEditPage from "@/pages/BodyEditPage";
+import TdeePage from "@/pages/TdeePage";
 import { usePageTracking } from "@/hooks/usePageTracking";
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/profile/edit" element={<ProfileEditPage />} />
           <Route path="/profile/body" element={<BodyEditPage />} />
+          <Route path="/tdee" element={<TdeePage />} />
         </Routes>
       </main>
     </>

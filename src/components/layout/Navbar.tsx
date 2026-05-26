@@ -5,6 +5,7 @@ import styles from "./Navbar.module.css";
 const NAV_ITEMS = [
   { href: "/meals/new", label: "음식 입력" },
   { href: "/records", label: "기록 보기" },
+  { href: "/tdee", label: "TDEE 분석" },
 ];
 
 export default function Navbar() {

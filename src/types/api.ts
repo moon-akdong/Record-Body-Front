@@ -98,6 +98,21 @@ export interface ImageUploadResponse {
   message: string;
 }
 
+// TDEE
+export interface PeriodNutritionRequest {
+  activity_level: string;
+  start_date: string;
+  end_date: string;
+}
+
+export interface DailyTdee {
+  date: string;
+  tdee_info: number;
+  message: string;
+}
+
+export type TdeeResponse = Record<string, DailyTdee>;
+
 // Sub Category
 export interface SubCategoryResponse {
   name: string;

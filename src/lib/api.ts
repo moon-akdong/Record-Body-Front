@@ -9,6 +9,8 @@ import {
   MealResponse,
   ImageUploadResponse,
   SubCategoryResponse,
+  PeriodNutritionRequest,
+  TdeeResponse,
 } from "@/types/api";
 import { getToken, removeToken } from "./auth";
 
@@ -150,6 +152,16 @@ export async function getRecordDates(
     `/check_record/month_record?year=${year}&month=${month}`
   );
   return data.month;
+}
+
+// TDEE
+export async function getDailyTdee(
+  data: PeriodNutritionRequest
+): Promise<TdeeResponse> {
+  return request<TdeeResponse>("/check_record/daliy_tdee", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
 }
 
 // Sub Categories
