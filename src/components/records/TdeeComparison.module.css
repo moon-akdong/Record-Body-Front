@@ -85,6 +85,22 @@
   color: #2196f3;
 }
 
+.statusMsg {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  padding: 24px 0;
+}
+
+.errorMsg {
+  font-size: 13px;
+  color: var(--color-error);
+  background-color: var(--color-error-bg);
+  padding: 10px 14px;
+  border-radius: var(--radius-input);
+  text-align: center;
+}
+
 .messageFooter {
   font-size: 13px;
   color: var(--color-text-secondary);
