@@ -57,15 +57,15 @@
 }
 
 .bar {
-  height: 10px;
-  border-radius: 5px;
+  height: 18px;
+  border-radius: 9px;
   background-color: var(--color-border);
   overflow: hidden;
 }
 
 .barFill {
   height: 100%;
-  border-radius: 5px;
+  border-radius: 9px;
   transition: width var(--transition-normal);
 }
 
