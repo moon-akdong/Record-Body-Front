@@ -167,14 +167,19 @@ export default function TdeePage() {
                     return (
                       <div key={item.date} className={styles.dailyRow}>
                         <span className={styles.dailyDate}>{item.date}</span>
-                        <div className={styles.barWrapper}>
-                          <div className={styles.bar}>
-                            <div
-                              className={`${styles.barFill} ${
-                                isSurplus ? styles.surplus : styles.deficit
-                              }`}
-                              style={{ width: `${barPercent}%` }}
-                            />
+                        <div className={styles.dailyDetail}>
+                          <span className={styles.dailyCalories}>
+                            섭취 {Math.round(item.daily_tdee.calories)} / TDEE {Math.round(item.daily_tdee.tdee)}
+                          </span>
+                          <div className={styles.barWrapper}>
+                            <div className={styles.bar}>
+                              <div
+                                className={`${styles.barFill} ${
+                                  isSurplus ? styles.surplus : styles.deficit
+                                }`}
+                                style={{ width: `${barPercent}%` }}
+                              />
+                            </div>
                           </div>
                           <span className={styles.dailyMessage}>{item.daily_tdee.message}</span>
                         </div>
