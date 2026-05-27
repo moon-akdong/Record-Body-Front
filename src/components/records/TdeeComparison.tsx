@@ -12,6 +12,12 @@ const LEVEL_LABELS: { key: keyof OneDayTdeeResponse["levels"]; label: string }[]
   { key: "very_active", label: "매우 활발 (운동선수 수준)" },
 ];
 
+function getDiffLabel(diff: number): string {
+  if (diff > 0) return "잉여 칼로리";
+  if (diff < 0) return "칼로리 적자";
+  return "유지";
+}
+
 interface TdeeComparisonProps {
   date: Date;
   hasMeals: boolean;
@@ -68,6 +74,7 @@ export default function TdeeComparison({ date, hasMeals }: TdeeComparisonProps) 
               {LEVEL_LABELS.map(({ key, label }) => {
                 const diff = data.levels[key];
                 const isSurplus = diff > 0;
+                const isZero = diff === 0;
                 const barPercent = Math.min((Math.abs(diff) / maxAbs) * 100, 100);
 
                 return (
@@ -81,9 +88,14 @@ export default function TdeeComparison({ date, hasMeals }: TdeeComparisonProps) 
                         />
                       </div>
                     </div>
-                    <span className={`${styles.levelValue} ${isSurplus ? styles.surplus : styles.deficit}`}>
-                      {isSurplus ? "+" : ""}{diff} kcal
-                    </span>
+                    <div className={styles.levelResult}>
+                      <span className={`${styles.levelValue} ${isSurplus ? styles.surplus : isZero ? "" : styles.deficit}`}>
+                        {isSurplus ? "+" : ""}{diff} kcal
+                      </span>
+                      <span className={`${styles.levelTag} ${isSurplus ? styles.surplusTag : isZero ? styles.maintainTag : styles.deficitTag}`}>
+                        {getDiffLabel(diff)}
+                      </span>
+                    </div>
                   </div>
                 );
               })}
