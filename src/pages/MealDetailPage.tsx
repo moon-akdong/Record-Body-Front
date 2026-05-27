@@ -13,6 +13,7 @@ const MEAL_TYPE_LABELS: Record<string, string> = {
   lunch: "점심",
   dinner: "저녁",
   snack: "간식",
+  night: "야식",
 };
 
 const MACRO_COLORS = {
