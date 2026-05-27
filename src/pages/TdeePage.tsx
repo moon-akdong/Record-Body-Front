@@ -68,10 +68,12 @@ export default function TdeePage() {
 
   const totalDays = result?.length ?? 0;
 
-  const avgDiff =
+  const totalDiff =
     totalDays > 0
-      ? result!.reduce((sum, d) => sum + d.daily_tdee.tdee, 0) / totalDays
+      ? result!.reduce((sum, d) => sum + d.daily_tdee.tdee, 0)
       : 0;
+
+  const avgDiff = totalDays > 0 ? totalDiff / totalDays : 0;
 
   const maxAbsValue =
     totalDays > 0
@@ -138,6 +140,17 @@ export default function TdeePage() {
               <Card className={styles.summaryCard}>
                 <span className={styles.summaryValue}>{totalDays}</span>
                 <span className={styles.summaryLabel}>분석 일수</span>
+              </Card>
+              <Card className={styles.summaryCard}>
+                <span
+                  className={`${styles.summaryValue} ${
+                    totalDiff > 0 ? styles.surplus : totalDiff < 0 ? styles.deficit : ""
+                  }`}
+                >
+                  {totalDiff > 0 ? "+" : ""}
+                  {Math.round(totalDiff)}
+                </span>
+                <span className={styles.summaryLabel}>총합 잉여/부족 (kcal)</span>
               </Card>
               <Card className={styles.summaryCard}>
                 <span
