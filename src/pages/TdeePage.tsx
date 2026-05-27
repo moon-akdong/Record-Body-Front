@@ -88,7 +88,7 @@ export default function TdeePage() {
   return (
     <AuthGuard>
       <div className={styles.container}>
-        <h1 className={styles.title}>TDEE 분석</h1>
+        <h1 className={styles.title}>칼로리 분석</h1>
 
         <Card>
           <form className={styles.inputSection} onSubmit={handleSubmit}>
@@ -147,10 +147,9 @@ export default function TdeePage() {
                     totalDiff > 0 ? styles.surplus : totalDiff < 0 ? styles.deficit : ""
                   }`}
                 >
-                  {totalDiff > 0 ? "+" : ""}
-                  {Math.round(totalDiff)}
+                  {Math.round(Math.abs(totalDiff))}
                 </span>
-                <span className={styles.summaryLabel}>총합 잉여/부족 (kcal)</span>
+                <span className={styles.summaryLabel}>총 칼로리 밸런스</span>
               </Card>
               <Card className={styles.summaryCard}>
                 <span
@@ -158,10 +157,9 @@ export default function TdeePage() {
                     avgDiff > 0 ? styles.surplus : avgDiff < 0 ? styles.deficit : ""
                   }`}
                 >
-                  {avgDiff > 0 ? "+" : ""}
-                  {Math.round(avgDiff)}
+                  {Math.round(Math.abs(avgDiff))}
                 </span>
-                <span className={styles.summaryLabel}>평균 잉여/부족 (kcal)</span>
+                <span className={styles.summaryLabel}>평균 칼로리 밸런스</span>
               </Card>
             </div>
 
@@ -205,8 +203,7 @@ export default function TdeePage() {
                                 isSurplus ? styles.surplus : isZero ? "" : styles.deficit
                               }`}
                             >
-                              {isSurplus ? "+" : ""}
-                              {Math.round(diff)} kcal
+                              {Math.round(Math.abs(diff))} kcal
                             </span>
                             <span className={`${styles.dailyTag} ${
                               isSurplus ? styles.surplusTag : isZero ? styles.maintainTag : styles.deficitTag

@@ -99,7 +99,6 @@ export default function NewMealPage() {
   const [items, setItems] = useState<MealItem[]>([emptyItem()]);
   const [memo, setMemo] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
-  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const errorRef = useRef<HTMLDivElement>(null);
 
@@ -162,7 +161,6 @@ export default function NewMealPage() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
-    setSubmitting(true);
 
     let hour24 = Number(dateTime.hour12);
     if (dateTime.ampm === "AM") {
@@ -174,10 +172,12 @@ export default function NewMealPage() {
 
     const eatenAt = `${dateTime.year}-${dateTime.month}-${dateTime.day}T${String(hour24).padStart(2, "0")}:${String(minuteVal).padStart(2, "0")}:00`;
 
-    try {
+    const file = imageFile;
+
+    const submitInBackground = async () => {
       let imageUrl: string | undefined;
-      if (imageFile) {
-        const res = await uploadImage(imageFile);
+      if (file) {
+        const res = await uploadImage(file);
         imageUrl = res.image_url;
       }
 
@@ -189,16 +189,23 @@ export default function NewMealPage() {
         items,
       };
       await createMeal(payload);
-      navigate("/records");
-    } catch (err) {
-      if (err instanceof ApiError && err.status === 409) {
-        setError("해당 시간대에 이미 등록된 식사 기록이 있습니다.");
-      } else {
-        setError(err instanceof Error ? err.message : "등록에 실패했습니다.");
-      }
-    } finally {
-      setSubmitting(false);
-    }
+    };
+
+    submitInBackground()
+      .then(() => {
+        window.dispatchEvent(new Event("meal-saved"));
+      })
+      .catch((err) => {
+        let message = "등록에 실패했습니다.";
+        if (err instanceof ApiError && err.status === 409) {
+          message = "해당 시간대에 이미 등록된 식사 기록이 있습니다.";
+        } else if (err instanceof Error) {
+          message = err.message;
+        }
+        window.dispatchEvent(new CustomEvent("meal-save-error", { detail: message }));
+      });
+
+    navigate("/records", { state: { saving: true } });
   }
 
   return (
@@ -305,8 +312,8 @@ export default function NewMealPage() {
               </Card>
 
               <div className={styles.actions}>
-                <Button type="submit" disabled={submitting}>
-                  {submitting ? "등록 중..." : "식사 등록"}
+                <Button type="submit">
+                  식사 등록
                 </Button>
                 <Button type="button" variant="outline" onClick={resetForm}>
                   초기화

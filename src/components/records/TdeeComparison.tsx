@@ -58,7 +58,7 @@ export default function TdeeComparison({ date, hasMeals }: TdeeComparisonProps) 
 
   return (
     <div>
-      <div className={styles.sectionTitle}>칼로리 vs TDEE</div>
+      <div className={styles.sectionTitle}>칼로리 밸런스</div>
       <Card>
         {loading ? (
           <div className={styles.statusMsg}>불러오는 중...</div>
@@ -90,7 +90,7 @@ export default function TdeeComparison({ date, hasMeals }: TdeeComparisonProps) 
                     </div>
                     <div className={styles.levelResult}>
                       <span className={`${styles.levelValue} ${isSurplus ? styles.surplus : isZero ? "" : styles.deficit}`}>
-                        {isSurplus ? "+" : ""}{diff} kcal
+                        {Math.abs(diff)} kcal
                       </span>
                       <span className={`${styles.levelTag} ${isSurplus ? styles.surplusTag : isZero ? styles.maintainTag : styles.deficitTag}`}>
                         {getDiffLabel(diff)}
