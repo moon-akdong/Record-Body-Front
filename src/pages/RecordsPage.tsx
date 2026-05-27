@@ -102,12 +102,12 @@ export default function RecordsPage() {
         ) : (
           <>
             <DailySummary meals={meals} />
+            <TdeeComparison date={date} hasMeals={meals.length > 0} />
             <div className={styles.meals}>
               {meals.map((meal) => (
                 <MealCard key={meal.id} meal={meal} onDeleted={fetchMeals} />
               ))}
             </div>
-            <TdeeComparison date={date} hasMeals={meals.length > 0} />
           </>
         )}
       </div>
