@@ -5,11 +5,11 @@ import { OneDayTdeeResponse } from "@/types/api";
 import styles from "./TdeeComparison.module.css";
 
 const LEVEL_LABELS: { key: keyof OneDayTdeeResponse["levels"]; label: string }[] = [
-  { key: "SEDENTARY", label: "비활동적 (운동 거의 안 함)" },
-  { key: "LIGHT", label: "가벼운 활동 (주 1-3회)" },
-  { key: "MODERATE", label: "보통 활동 (주 3-5회)" },
-  { key: "ACTIVE", label: "활발한 활동 (주 6-7회)" },
-  { key: "VERY_ACTIVE", label: "매우 활발 (운동선수 수준)" },
+  { key: "sedentary", label: "비활동적 (운동 거의 안 함)" },
+  { key: "light", label: "가벼운 활동 (주 1-3회)" },
+  { key: "moderate", label: "보통 활동 (주 3-5회)" },
+  { key: "active", label: "활발한 활동 (주 6-7회)" },
+  { key: "very_active", label: "매우 활발 (운동선수 수준)" },
 ];
 
 interface TdeeComparisonProps {
@@ -79,6 +79,9 @@ export default function TdeeComparison({ date, hasMeals }: TdeeComparisonProps) 
             );
           })}
         </div>
+        {data.message && (
+          <div className={styles.messageFooter}>{data.message}</div>
+        )}
       </Card>
     </div>
   );

@@ -10,7 +10,7 @@ import {
   ImageUploadResponse,
   SubCategoryResponse,
   PeriodNutritionRequest,
-  TdeeResponse,
+  PeriodTdee,
   OneDayTdeeResponse,
 } from "@/types/api";
 import { getToken, removeToken } from "./auth";
@@ -156,10 +156,10 @@ export async function getRecordDates(
 }
 
 // TDEE
-export async function getDailyTdee(
+export async function getPeriodTdee(
   data: PeriodNutritionRequest
-): Promise<TdeeResponse> {
-  return request<TdeeResponse>("/check_record/daliy_tdee", {
+): Promise<PeriodTdee[]> {
+  return request<PeriodTdee[]>("/check_record/period_tdee", {
     method: "POST",
     body: JSON.stringify(data),
   });

@@ -106,24 +106,28 @@ export interface PeriodNutritionRequest {
 }
 
 export interface DailyTdee {
-  date: string;
-  tdee_info: number;
+  calories: number;
+  tdee: number;
   message: string;
 }
 
-export type TdeeResponse = Record<string, DailyTdee>;
+export interface PeriodTdee {
+  date: string;
+  daily_tdee: DailyTdee;
+}
 
 export interface OneDayActiveLevels {
-  SEDENTARY: number;
-  LIGHT: number;
-  MODERATE: number;
-  ACTIVE: number;
-  VERY_ACTIVE: number;
+  sedentary: number;
+  light: number;
+  moderate: number;
+  active: number;
+  very_active: number;
 }
 
 export interface OneDayTdeeResponse {
   total_calories: number;
   levels: OneDayActiveLevels;
+  message: string;
 }
 
 // Sub Category

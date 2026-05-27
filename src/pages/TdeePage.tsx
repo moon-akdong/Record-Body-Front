@@ -6,8 +6,8 @@ import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import Button from "@/components/ui/Button";
-import { getDailyTdee } from "@/lib/api";
-import { DailyTdee } from "@/types/api";
+import { getPeriodTdee } from "@/lib/api";
+import { PeriodTdee } from "@/types/api";
 import styles from "@/app/tdee/page.module.css";
 
 const ACTIVITY_OPTIONS = [
@@ -27,7 +27,7 @@ export default function TdeePage() {
   const [startDate, setStartDate] = useState(weekAgo);
   const [endDate, setEndDate] = useState(today);
   const [activityLevel, setActivityLevel] = useState("");
-  const [result, setResult] = useState<[string, DailyTdee][] | null>(null);
+  const [result, setResult] = useState<PeriodTdee[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -51,14 +51,14 @@ export default function TdeePage() {
 
     setLoading(true);
     try {
-      const data = await getDailyTdee({
+      const data = await getPeriodTdee({
         activity_level: activityLevel,
         start_date: `${startDate}T00:00:00`,
         end_date: `${endDate}T23:59:59`,
       });
 
-      const entries = Object.entries(data).sort(([a], [b]) => a.localeCompare(b));
-      setResult(entries);
+      const sorted = [...data].sort((a, b) => a.date.localeCompare(b.date));
+      setResult(sorted);
     } catch (err) {
       setError(err instanceof Error ? err.message : "TDEE 분석에 실패했습니다.");
     } finally {
@@ -67,13 +67,18 @@ export default function TdeePage() {
   }
 
   const totalDays = result?.length ?? 0;
-  const avgTdeeInfo =
+
+  const avgDiff =
     totalDays > 0
-      ? result!.reduce((sum, [, d]) => sum + d.tdee_info, 0) / totalDays
+      ? result!.reduce((sum, d) => sum + (d.daily_tdee.calories - d.daily_tdee.tdee), 0) / totalDays
       : 0;
+
   const maxAbsValue =
     totalDays > 0
-      ? Math.max(...result!.map(([, d]) => Math.abs(d.tdee_info)), 1)
+      ? Math.max(
+          ...result!.map((d) => Math.abs(d.daily_tdee.calories - d.daily_tdee.tdee)),
+          1
+        )
       : 1;
 
   if (!user) return null;
@@ -137,11 +142,11 @@ export default function TdeePage() {
               <Card className={styles.summaryCard}>
                 <span
                   className={`${styles.summaryValue} ${
-                    avgTdeeInfo > 0 ? styles.surplus : avgTdeeInfo < 0 ? styles.deficit : ""
+                    avgDiff > 0 ? styles.surplus : avgDiff < 0 ? styles.deficit : ""
                   }`}
                 >
-                  {avgTdeeInfo > 0 ? "+" : ""}
-                  {Math.round(avgTdeeInfo)}
+                  {avgDiff > 0 ? "+" : ""}
+                  {Math.round(avgDiff)}
                 </span>
                 <span className={styles.summaryLabel}>평균 잉여/부족 (kcal)</span>
               </Card>
@@ -151,17 +156,17 @@ export default function TdeePage() {
               <div className={styles.sectionTitle}>일별 상세</div>
               <Card>
                 <div className={styles.dailyList}>
-                  {result.map(([key, day]) => {
-                    const dateStr = day.date.split("T")[0];
-                    const isSurplus = day.tdee_info > 0;
+                  {result.map((item) => {
+                    const diff = item.daily_tdee.calories - item.daily_tdee.tdee;
+                    const isSurplus = diff > 0;
                     const barPercent = Math.min(
-                      (Math.abs(day.tdee_info) / maxAbsValue) * 100,
+                      (Math.abs(diff) / maxAbsValue) * 100,
                       100
                     );
 
                     return (
-                      <div key={key} className={styles.dailyRow}>
-                        <span className={styles.dailyDate}>{dateStr}</span>
+                      <div key={item.date} className={styles.dailyRow}>
+                        <span className={styles.dailyDate}>{item.date}</span>
                         <div className={styles.barWrapper}>
                           <div className={styles.bar}>
                             <div
@@ -171,7 +176,7 @@ export default function TdeePage() {
                               style={{ width: `${barPercent}%` }}
                             />
                           </div>
-                          <span className={styles.dailyMessage}>{day.message}</span>
+                          <span className={styles.dailyMessage}>{item.daily_tdee.message}</span>
                         </div>
                         <span
                           className={`${styles.dailyValue} ${
@@ -179,7 +184,7 @@ export default function TdeePage() {
                           }`}
                         >
                           {isSurplus ? "+" : ""}
-                          {Math.round(day.tdee_info)} kcal
+                          {Math.round(diff)} kcal
                         </span>
                       </div>
                     );
