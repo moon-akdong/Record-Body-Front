@@ -70,13 +70,13 @@ export default function TdeePage() {
 
   const avgDiff =
     totalDays > 0
-      ? result!.reduce((sum, d) => sum + (d.daily_tdee.calories - d.daily_tdee.tdee), 0) / totalDays
+      ? result!.reduce((sum, d) => sum + d.daily_tdee.tdee, 0) / totalDays
       : 0;
 
   const maxAbsValue =
     totalDays > 0
       ? Math.max(
-          ...result!.map((d) => Math.abs(d.daily_tdee.calories - d.daily_tdee.tdee)),
+          ...result!.map((d) => Math.abs(d.daily_tdee.tdee)),
           1
         )
       : 1;
@@ -157,7 +157,7 @@ export default function TdeePage() {
               <Card>
                 <div className={styles.dailyList}>
                   {result.map((item) => {
-                    const diff = item.daily_tdee.calories - item.daily_tdee.tdee;
+                    const diff = item.daily_tdee.tdee;
                     const isSurplus = diff > 0;
                     const barPercent = Math.min(
                       (Math.abs(diff) / maxAbsValue) * 100,
@@ -169,7 +169,7 @@ export default function TdeePage() {
                         <span className={styles.dailyDate}>{item.date}</span>
                         <div className={styles.dailyDetail}>
                           <span className={styles.dailyCalories}>
-                            섭취 {Math.round(item.daily_tdee.calories)} / TDEE {Math.round(item.daily_tdee.tdee)}
+                            섭취 {Math.round(item.daily_tdee.calories)} kcal
                           </span>
                           <div className={styles.barWrapper}>
                             <div className={styles.bar}>
