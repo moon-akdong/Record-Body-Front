@@ -159,18 +159,23 @@ export default function TdeePage() {
                   {result.map((item) => {
                     const diff = item.daily_tdee.tdee;
                     const isSurplus = diff > 0;
+                    const isZero = diff === 0;
                     const barPercent = Math.min(
                       (Math.abs(diff) / maxAbsValue) * 100,
                       100
                     );
+                    const diffLabel = isSurplus ? "잉여 칼로리" : isZero ? "유지" : "칼로리 적자";
 
                     return (
                       <div key={item.date} className={styles.dailyRow}>
-                        <span className={styles.dailyDate}>{item.date}</span>
-                        <div className={styles.dailyDetail}>
+                        <div className={styles.dailyHeader}>
+                          <span className={styles.dailyDate}>{item.date}</span>
                           <span className={styles.dailyCalories}>
                             섭취 {Math.round(item.daily_tdee.calories)} kcal
                           </span>
+                          <span className={styles.dailyMessage}>{item.daily_tdee.message}</span>
+                        </div>
+                        <div className={styles.dailyBarRow}>
                           <div className={styles.barWrapper}>
                             <div className={styles.bar}>
                               <div
@@ -181,16 +186,22 @@ export default function TdeePage() {
                               />
                             </div>
                           </div>
-                          <span className={styles.dailyMessage}>{item.daily_tdee.message}</span>
+                          <div className={styles.dailyResult}>
+                            <span
+                              className={`${styles.dailyValue} ${
+                                isSurplus ? styles.surplus : isZero ? "" : styles.deficit
+                              }`}
+                            >
+                              {isSurplus ? "+" : ""}
+                              {Math.round(diff)} kcal
+                            </span>
+                            <span className={`${styles.dailyTag} ${
+                              isSurplus ? styles.surplusTag : isZero ? styles.maintainTag : styles.deficitTag
+                            }`}>
+                              {diffLabel}
+                            </span>
+                          </div>
                         </div>
-                        <span
-                          className={`${styles.dailyValue} ${
-                            isSurplus ? styles.surplus : styles.deficit
-                          }`}
-                        >
-                          {isSurplus ? "+" : ""}
-                          {Math.round(diff)} kcal
-                        </span>
                       </div>
                     );
                   })}
