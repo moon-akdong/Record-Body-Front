@@ -61,7 +61,8 @@ export default function TdeeComparison({ date, hasMeals }: TdeeComparisonProps) 
         ) : data ? (
           <>
             <div className={styles.intakeHeader}>
-              총 섭취 <strong>{data.total_calories.toLocaleString()} kcal</strong>
+              <span>총 섭취 <strong>{data.total_calories.toLocaleString()} kcal</strong></span>
+              {data.message && <span className={styles.intakeMessage}>{data.message}</span>}
             </div>
             <div className={styles.levelList}>
               {LEVEL_LABELS.map(({ key, label }) => {
@@ -87,9 +88,6 @@ export default function TdeeComparison({ date, hasMeals }: TdeeComparisonProps) 
                 );
               })}
             </div>
-            {data.message && (
-              <div className={styles.messageFooter}>{data.message}</div>
-            )}
           </>
         ) : null}
       </Card>

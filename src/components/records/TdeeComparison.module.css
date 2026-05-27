@@ -6,11 +6,19 @@
 }
 
 .intakeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 14px;
   color: var(--color-text-secondary);
   padding-bottom: 14px;
   border-bottom: 1px solid var(--color-border);
   margin-bottom: 4px;
+}
+
+.intakeMessage {
+  font-size: 13px;
+  color: var(--color-text-secondary);
 }
 
 .intakeHeader strong {
